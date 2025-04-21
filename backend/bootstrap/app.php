@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api.php',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->register('is_admin', \App\Http\Middleware\IsAdmin::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
