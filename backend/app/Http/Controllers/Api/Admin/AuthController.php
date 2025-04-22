@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,10 +9,12 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function me(Request $request)
+
+    public function profile(Request $request)
     {
         return response()->json($request->user());
     }
+
     public function register(Request $request)
     {
         $fields = $request->validate([
@@ -49,6 +51,10 @@ class AuthController extends Controller
                 'email' => ['البريد الإلكتروني أو كلمة المرور غير صحيحة.'],
             ]);
         }
+        if ($user->is_admin == 0) {
+            return response()->json(['message' => 'ليس لديك صلاحيات الدخول'], 403);
+        }
+
 
         $token = $user->createToken('ecommerce-token')->plainTextToken;
 

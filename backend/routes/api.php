@@ -1,17 +1,15 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\Admin\AuthController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/example', function () {
-    return response()->json([
-        'message' => 'Hello from Laravel API!',
-    ]);
-});
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -46,7 +44,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);
 });
 // Admin routes
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::get('/admin/orders', [OrderController::class, 'adminIndex']);
-    Route::patch('/admin/orders/{id}/status', [OrderController::class, 'updateStatus']);
+
+// Routes Admin
+Route::prefix('admin')->group(function () {
+    Route::post('/register', [AuthController::class, 'adminRegister']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::middleware(['auth:sanctum', 'isAdmin'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index']);
+        Route::get('/profile', [AuthController::class, 'profile']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::put('/orders/{id}', [OrderController::class, 'index']);
+        Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+    });
+
 });

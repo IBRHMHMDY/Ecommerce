@@ -1,14 +1,41 @@
+// Import the necessary modules
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView,
+      path: '/admin/login',
+      name: 'AdminLogin',
+      component: () => import('@/views/admin/auth/Login.vue'),
+      meta: { layout: 'none' }
+    },    
+    {
+      path: '/admin',
+      component: () => import('../layouts/adminLayout.vue'), // تأكد أن الـ navbar داخل الـ Layout هذا
+      children: [
+        {
+          path: 'dashboard',
+          name: 'Admin Dashboard',
+          component: () => import('../views/admin/Dashboard.vue'),
+          meta: { requiresAuth: true } // تحقق من أنه لا يوجد قيد يمنع عرض الـ navbar
+        }
+      ]
     },
+    {
+      path: '/',
+      component: () => import('@/layouts/defaultLayout.vue'), // تأكد أن الـ navbar داخل الـ Layout هذا
+      meta: { requiresAuth: false }, // تحقق من أنه لا يوجد قيد يمنع عرض الـ navbar
+      children: [
+        {
+          path: 'home',
+          name: 'Home',
+          component: () => import('@/views/home/Home.vue'),
+          meta: { requiresAuth: false } // تحقق من أنه لا يوجد قيد يمنع عرض الـ navbar
+        }
+      ]
+    }
   ],
 })
 

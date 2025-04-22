@@ -15,12 +15,6 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
-    public function adminIndex()
-    {
-        $orders = Order::with(['user', 'items.product'])->latest()->get();
-        return response()->json($orders);
-    }
-
     public function store()
     {
         $user = Auth::user();
