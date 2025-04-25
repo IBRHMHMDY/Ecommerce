@@ -32,17 +32,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/cart', [CartItemController::class, 'index']);
-    Route::post('/cart', [CartItemController::class, 'store']);
-    Route::put('/cart/{id}', [CartItemController::class, 'update']);
-    Route::delete('/cart/{id}', [CartItemController::class, 'destroy']);
-});
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::get('/cart', [CartItemController::class, 'index']);
+//     Route::post('/cart', [CartItemController::class, 'store']);
+//     Route::put('/cart/{id}', [CartItemController::class, 'update']);
+//     Route::delete('/cart/{id}', [CartItemController::class, 'destroy']);
+// });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/orders', [OrderController::class, 'index']);
-    Route::post('/orders', [OrderController::class, 'store']);
-});
 
 // Routes Admin
 Route::prefix('admin')->group(function () {
@@ -53,8 +49,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/profile', [AuthController::class, 'profile']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/dashboard/stats', [DashboardController::class, 'getStats']);
-        Route::put('/orders/{id}', [OrderController::class, 'index']);
-        Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+        Route::get('/orders', [OrderController::class, 'indexAdmin']);
+        Route::get('/orders/{id}', [OrderController::class, 'show']);
+        Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus']);
     });
 
 });

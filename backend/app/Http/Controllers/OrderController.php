@@ -6,9 +6,18 @@ use App\Models\OrderItem;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+
+    public function indexAdmin(Request $request)
+    {
+        $orders = Order::with(['user', 'items.product'])->get();
+        return response()->json($orders);
+    }
+
+
     public function index()
     {
         $orders = Order::with('items.product')->where('user_id', Auth::id())->get();
@@ -58,20 +67,35 @@ class OrderController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $order = Order::with(['user', 'items.product'])->findOrFail($id);
+
+            return response()->json([
+                'status' => true,
+                'order' => $order
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'حدث خطأ أثناء جلب تفاصيل الطلب',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,confirmed,shipped,delivered,canceled'
+            'status' => 'required|in:pending,processing,shipped,delivered,canceled', // حسب القيم المسموح بها عندك
         ]);
 
         $order = Order::findOrFail($id);
         $order->status = $request->status;
         $order->save();
 
-        return response()->json([
-            'message' => 'تم تحديث حالة الطلب بنجاح',
-            'order' => $order
-        ]);
+        return response()->json(['message' => 'تم تحديث حالة الطلب بنجاح']);
     }
 
 }

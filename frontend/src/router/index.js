@@ -1,7 +1,6 @@
 // Import the necessary modules
 import { createRouter, createWebHistory } from 'vue-router'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -20,7 +19,25 @@ const router = createRouter({
           name: 'Admin Dashboard',
           component: () => import('../views/admin/Dashboard.vue'),
           meta: { requiresAuth: true } // تحقق من أنه لا يوجد قيد يمنع عرض الـ navbar
-        }
+        },
+        {
+          path: 'categories',
+          name: 'Admin Categories',
+          component: () => import('../views/admin/Categories.vue'),
+          meta: { requiresAuth: true } // تحقق من أنه لا يوجد قيد يمنع عرض الـ navbar
+        },
+        {
+          path: 'products',
+          name: 'Admin Products',
+          component: () => import('../views/admin/Products.vue'),
+          meta: { requiresAuth: true } // تحقق من أنه لا يوجد قيد يمنع عرض الـ navbar
+        },
+        {
+          path: 'orders',
+          name: 'Admin Orders',
+          component: () => import('../views/admin/Orders.vue'),
+          meta: { requiresAuth: true } // تحقق من أنه لا يوجد قيد يمنع عرض الـ navbar
+        },
       ]
     },
     {
