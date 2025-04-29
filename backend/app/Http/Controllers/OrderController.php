@@ -11,16 +11,9 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
 
-    public function indexAdmin(Request $request)
-    {
-        $orders = Order::with(['user', 'items.product'])->get();
-        return response()->json($orders);
-    }
-
-
     public function index()
     {
-        $orders = Order::with('items.product')->where('user_id', Auth::id())->get();
+        $orders = Order::with(['user', 'items.product'])->get();
         return response()->json($orders);
     }
 
